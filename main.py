@@ -1,5 +1,4 @@
 import pygame
-import sys
 import random
 
 pygame.init()
@@ -9,6 +8,20 @@ windowwidth = 500
 
 window = pygame.display.set_mode((windowwidth, windowheight))
 
+def checkcollision(hazardyround, hazardxround,dead, x, y):  # checks to see if the player is in the hazard
+    if x >= hazardxround and x <= hazardxround + 50:
+        if y >= hazardyround and y <= hazardyround + 50:
+            dead = True
+    if x + 20 >= hazardxround and x + 20 <= hazardxround + 50:
+        if y + 20 >= hazardyround and y + 20 <= hazardyround + 50:
+            dead = True
+    if x + 20 >= hazardxround and x + 20 <= hazardxround + 50:
+        if y >= hazardyround and y <= hazardyround + 50:
+            dead = True
+    if x >= hazardxround and x <= hazardxround + 50:
+        if y + 20 >= hazardyround and y + 20 <= hazardyround + 50:
+            dead = True
+    return dead
 
 def main():
     textfont = pygame.font.SysFont("arial", 40)
@@ -101,9 +114,6 @@ def main():
                 hazardx += hazardspeed
             if hazardy < y:
                 hazardy += hazardspeed
-        if x >= hazardxround and x <= hazardxround + 50:
-            if y >= hazardyround and y <= hazardyround + 50:
-                dead = True
         if dead == True and done == False:
             f = open('highscore.txt', 'r')
             score = []
@@ -116,9 +126,11 @@ def main():
             f = open('highscore.txt', 'w')
             for i in score:
                 i = int(i)
+                highest = int(highest)
                 if i > highest:
                     highest = i
             money = int(money)
+            highest = int(highest)
             if money > highest:
                 money = str(money)
                 f.write(money)
@@ -126,7 +138,7 @@ def main():
                 highest = str(highest)
                 f.write(highest)
             f.close()
-
+        dead = checkcollision(hazardyround, hazardxround, dead, x, y)
         if x >= coinx and x <= coinx + 20:
             if y >= coiny and y <= coiny + 20:
                 money = int(money)
